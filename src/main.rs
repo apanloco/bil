@@ -1,7 +1,7 @@
+use macroquad::audio::{load_sound, play_sound, stop_sound, PlaySoundParams, Sound};
 use macroquad::prelude::*;
-use macroquad::audio::{Sound, load_sound, play_sound, stop_sound, PlaySoundParams};
 use std::collections::HashMap;
-
+//
 struct EngineSound {
     running: bool,
     sound: Option<Sound>,
@@ -12,7 +12,7 @@ impl EngineSound {
         if !self.running {
             let params = PlaySoundParams {
                 looped: true,
-                volume: 1.0
+                volume: 1.0,
             };
             play_sound(self.sound.unwrap(), params);
         }
@@ -53,62 +53,52 @@ impl Car {
             engine_sound: EngineSound {
                 running: false,
                 sound: None,
-            }
+            },
         }
     }
 
-    fn update(&mut self, delta: f64)
-    {
+    fn update(&mut self, delta: f64) {
         self.velocity -= self.resistance * delta;
-        if self.velocity < 0.
-        {
+        if self.velocity < 0. {
             self.velocity = 0.;
         }
 
         self.position.x += (self.rotation.sin() * self.velocity * delta) as f32;
         self.position.y += (self.rotation.cos() * -1. * self.velocity * delta) as f32;
 
-        if self.position.x < 0.
-        {
+        if self.position.x < 0. {
             self.position.x = 0.;
         }
 
-        if self.position.x > screen_width()
-        {
+        if self.position.x > screen_width() {
             self.position.x = screen_width();
         }
 
-        if self.position.y < 0.
-        {
+        if self.position.y < 0. {
             self.position.y = 0.;
         }
 
-        if self.position.y > screen_height()
-        {
+        if self.position.y > screen_height() {
             self.position.y = screen_height();
         }
     }
 
-    fn turn_left(&mut self, delta: f64)
-    {
+    fn turn_left(&mut self, delta: f64) {
         self.rotation -= self.turn_speed * delta;
     }
 
-    fn turn_right(&mut self, delta: f64)
-    {
+    fn turn_right(&mut self, delta: f64) {
         self.rotation += self.turn_speed * delta;
     }
 
-    fn accelerate(&mut self, delta: f64)
-    {
+    fn accelerate(&mut self, delta: f64) {
         self.velocity += self.acceleration * delta;
         if self.velocity > self.max_velocity {
             self.velocity = self.max_velocity;
         }
     }
 
-    fn decelerate(&mut self, delta: f64)
-    {
+    fn decelerate(&mut self, delta: f64) {
         self.velocity -= self.breaking_speed * delta;
     }
 
@@ -118,7 +108,10 @@ impl Car {
         let car_scale = 1.;
 
         let params = DrawTextureParams {
-            dest_size: Some(Vec2::new(car_texture.width() * car_scale, car_texture.height() * car_scale)),
+            dest_size: Some(Vec2::new(
+                car_texture.width() * car_scale,
+                car_texture.height() * car_scale,
+            )),
             source: None,
             rotation: self.rotation as f32 - 90.0_f64.to_radians() as f32,
             flip_x: true,
@@ -126,11 +119,13 @@ impl Car {
             pivot: None,
         };
 
-        draw_texture_ex(car_texture,
-                        self.position.x - car_texture.width() / 2. * car_scale,
-                        self.position.y - car_texture.height() / 2. * car_scale,
-                        WHITE,
-                        params);
+        draw_texture_ex(
+            car_texture,
+            self.position.x - car_texture.width() / 2. * car_scale,
+            self.position.y - car_texture.height() / 2. * car_scale,
+            WHITE,
+            params,
+        );
     }
 }
 
@@ -139,8 +134,7 @@ enum State {
     GAME,
 }
 
-struct Game<'a>
-{
+struct Game<'a> {
     state: State,
     car1: Car,
     car2: Car,
@@ -193,36 +187,15 @@ fn handle_state_title() -> State {
 
     clear_background(BLACK);
 
-    draw_text_center_aligned(
-        "BIL",
-        100.,
-        font_size,
-        text_color,
-    );
+    draw_text_center_aligned("BIL", 100., font_size, text_color);
 
-    draw_text_center_aligned(
-        "ETT SPEL AV:",
-        150.,
-        font_size,
-        text_color,
-    );
+    draw_text_center_aligned("ETT SPEL AV:", 150., font_size, text_color);
 
-    draw_text_center_aligned(
-        "ALICE DAVID JULIA PAPPA MAMMA",
-        200.,
-        font_size,
-        text_color,
-    );
+    draw_text_center_aligned("ALICE DAVID JULIA PAPPA MAMMA", 200., font_size, text_color);
 
-    draw_text_center_aligned(
-        "TRYCK [ENTER] FÖR ATT SPELA",
-        300.,
-        font_size,
-        text_color,
-    );
+    draw_text_center_aligned("TRYCK [ENTER] FÖR ATT SPELA", 300., font_size, text_color);
 
-    if is_key_down(KeyCode::Enter)
-    {
+    if is_key_down(KeyCode::Enter) {
         return State::GAME;
     }
 
@@ -230,7 +203,6 @@ fn handle_state_title() -> State {
 }
 
 fn handle_state_game(game: &mut Game) -> State {
-
     game.car1.update(game.delta);
     game.car2.update(game.delta);
 
@@ -291,11 +263,18 @@ fn handle_state_game(game: &mut Game) -> State {
 async fn main() {
     let mut game = Game::new();
 
-    game.textures.insert("bil0", load_texture("assets/bil0.png").await.unwrap());
-    game.textures.insert("bil1", load_texture("assets/bil1.png").await.unwrap());
-    game.textures.insert("bg0", load_texture("assets/bg0.png").await.unwrap());
-    game.textures.insert("bg1", load_texture("assets/bg1.png").await.unwrap());
-    game.sounds.insert("car_engine", load_sound("assets/sounds/car_engine.wav").await.unwrap());
+    game.textures
+        .insert("bil0", load_texture("assets/bil0.png").await.unwrap());
+    game.textures
+        .insert("bil1", load_texture("assets/bil1.png").await.unwrap());
+    game.textures
+        .insert("bg0", load_texture("assets/bg0.png").await.unwrap());
+    game.textures
+        .insert("bg1", load_texture("assets/bg1.png").await.unwrap());
+    game.sounds.insert(
+        "car_engine",
+        load_sound("assets/sounds/car_engine.wav").await.unwrap(),
+    );
 
     game.car1.engine_sound.sound = Some(*game.sounds.get("car_engine").unwrap());
     game.car2.engine_sound.sound = Some(*game.sounds.get("car_engine").unwrap());
@@ -305,17 +284,21 @@ async fn main() {
 
         print!("delta: {}\n", game.delta);
 
-        print!("car1 x: {} y: {} vel: {}, rot: {}\n",
-               game.car1.position.x,
-               game.car1.position.y,
-               game.car1.velocity,
-               game.car1.rotation.to_degrees());
+        print!(
+            "car1 x: {} y: {} vel: {}, rot: {}\n",
+            game.car1.position.x,
+            game.car1.position.y,
+            game.car1.velocity,
+            game.car1.rotation.to_degrees()
+        );
 
-        print!("car2 x: {} y: {} vel: {}, rot: {}\n",
-               game.car2.position.x,
-               game.car2.position.y,
-               game.car2.velocity,
-               game.car2.rotation.to_degrees());
+        print!(
+            "car2 x: {} y: {} vel: {}, rot: {}\n",
+            game.car2.position.x,
+            game.car2.position.y,
+            game.car2.velocity,
+            game.car2.rotation.to_degrees()
+        );
 
         if is_key_down(KeyCode::Escape) {
             return;
