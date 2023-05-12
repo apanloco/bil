@@ -3,7 +3,7 @@ FROM rust
 RUN rustup target add wasm32-unknown-unknown
 WORKDIR /app
 RUN cargo init
-COPY Cargo.toml Cargo.lock /app
+COPY Cargo.toml Cargo.lock /app/
 RUN cargo build --target wasm32-unknown-unknown --release
 COPY ./ /app
 RUN cargo build --target wasm32-unknown-unknown --release
