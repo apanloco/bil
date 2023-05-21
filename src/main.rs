@@ -287,23 +287,23 @@ async fn main() {
     loop {
         game.new_frame();
 
-        print!("delta: {}\n", game.delta);
+        // print!("delta: {}\n", game.delta);
 
-        print!(
-            "car1 x: {} y: {} vel: {}, rot: {}\n",
-            game.car1.position.x,
-            game.car1.position.y,
-            game.car1.velocity,
-            game.car1.rotation.to_degrees()
-        );
+        // print!(
+        //     "car1 x: {} y: {} vel: {}, rot: {}\n",
+        //     game.car1.position.x,
+        //     game.car1.position.y,
+        //     game.car1.velocity,
+        //     game.car1.rotation.to_degrees()
+        // );
 
-        print!(
-            "car2 x: {} y: {} vel: {}, rot: {}\n",
-            game.car2.position.x,
-            game.car2.position.y,
-            game.car2.velocity,
-            game.car2.rotation.to_degrees()
-        );
+        // print!(
+        //     "car2 x: {} y: {} vel: {}, rot: {}\n",
+        //     game.car2.position.x,
+        //     game.car2.position.y,
+        //     game.car2.velocity,
+        //     game.car2.rotation.to_degrees()
+        // );
 
         if is_key_down(KeyCode::Escape) {
             return;
