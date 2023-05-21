@@ -105,7 +105,8 @@ impl Car {
     fn draw(&self, game: &Game) {
         let car_texture = *game.textures.get("bil1").unwrap();
 
-        let car_scale = 1.;
+        // car width should be an nth of the screen width
+        let car_scale = (screen_width() as f32 * 0.05) / car_texture.width() as f32;
 
         let params = DrawTextureParams {
             dest_size: Some(Vec2::new(
