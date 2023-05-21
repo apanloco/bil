@@ -1,7 +1,7 @@
 use macroquad::audio::{load_sound, play_sound, stop_sound, PlaySoundParams, Sound};
 use macroquad::prelude::*;
 use std::collections::HashMap;
-//
+
 struct EngineSound {
     running: bool,
     sound: Option<Sound>,
@@ -272,12 +272,16 @@ async fn main() {
     game.textures
         .insert("bg1", load_texture("assets/bg1.png").await.unwrap());
     game.sounds.insert(
-        "car_engine",
+        "car_engine_p1",
+        load_sound("assets/sounds/car_engine.wav").await.unwrap(),
+    );
+    game.sounds.insert(
+        "car_engine_p2",
         load_sound("assets/sounds/car_engine.wav").await.unwrap(),
     );
 
-    game.car1.engine_sound.sound = Some(*game.sounds.get("car_engine").unwrap());
-    game.car2.engine_sound.sound = Some(*game.sounds.get("car_engine").unwrap());
+    game.car1.engine_sound.sound = Some(*game.sounds.get("car_engine_p1").unwrap());
+    game.car2.engine_sound.sound = Some(*game.sounds.get("car_engine_p2").unwrap());
 
     loop {
         game.new_frame();
