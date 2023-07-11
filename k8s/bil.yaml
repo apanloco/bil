@@ -1,0 +1,56 @@
+kind: Namespace
+apiVersion: v1
+metadata:
+  name: bil
+  labels:
+    app: bil
+---
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  name: bil
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: bil
+  template:
+    metadata:
+      labels:
+        app: bil
+    spec:
+      containers:
+        - name: bil
+          image: arn.ocir.io/axiirc3u3iv6/bil:latest
+          imagePullPolicy: Always
+      imagePullSecrets:
+        - name: ocirsecret
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: bil
+  labels:
+    app: bil
+spec:
+  ports:
+    - port: 80
+      name: bil
+  selector:
+    app: bil
+---
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRoute
+metadata:
+  name: app-tls
+spec:
+  entryPoints:
+    - websecure
+  routes:
+    - kind: Rule
+      match: Host(`bil.akerud.se`)
+      services:
+        - name: bil 
+          port: 80
+  tls:
+    certResolver: le

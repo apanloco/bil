@@ -14,11 +14,10 @@ FROM nginx:alpine
 
 COPY index.html /usr/share/nginx/html/
 COPY favicon.ico /usr/share/nginx/html/
-COPY nginx.conf /etc/nginx/nginx.conf
 COPY assets /usr/share/nginx/html/assets
 COPY --from=build /app/target/wasm32-unknown-unknown/release/bil.wasm /usr/share/nginx/html/
 
-EXPOSE 8080
+EXPOSE 80
 
 CMD ["nginx", "-g", "daemon off;"]
 
